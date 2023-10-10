@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS staging_songs (
 
 songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS songplays (
-    songplay_id     bigint PRIMARY KEY,
+    songplay_id     bigint IDENTITY(0, 1) PRIMARY KEY,
     start_time      timestamp NOT NULL,          
     user_id         integer,         
     level           varchar,
@@ -139,18 +139,38 @@ staging_songs_copy = ("""
 # FINAL TABLES
 
 songplay_table_insert = ("""
+INSERT INTO songplays (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
+SELECT  
+FROM 
+JOIN ON ()
 """)
 
 user_table_insert = ("""
+INSERT INTO users (user_id, first_name, last_name, gender, level)
+SELECT  
+FROM 
+JOIN ON ()
 """)
 
 song_table_insert = ("""
+INSERT INTO songs (song_id, title, artist_id, year, duration)
+SELECT  
+FROM 
+JOIN ON ()
 """)
 
 artist_table_insert = ("""
+INSERT INTO artists (artist_id, name, location, latitude, longitude)
+SELECT  
+FROM 
+JOIN ON ()
 """)
 
 time_table_insert = ("""
+INSERT INTO time (start_time, hour, day, week, month, year, weekday)
+SELECT  
+FROM
+JOIN ON ()
 """)
 
 # QUERY LISTS
