@@ -121,8 +121,6 @@ staging_events_copy = f"""
     JSON {config['S3']['LOG_JSONPATH']}
 """
 
-#
-
 staging_songs_copy = f"""
     COPY staging_songs
     FROM {config['S3']['SONG_DATA']}
@@ -135,7 +133,8 @@ staging_songs_copy = f"""
 
 songplay_table_insert = ("""
     INSERT INTO songplays (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
-    SELECT se.ts,
+    SELECT
+        TIMESTAMP 'epoch' + (se.ts / 1000) * INTERVAL '1 second',
         se.user_id,
         se.level,
         ss.song_id,
@@ -149,33 +148,39 @@ songplay_table_insert = ("""
 """)
 
 user_table_insert = ("""
-    INSERT INTO users SELECT DISTINCT (user_id)
+    INSERT INTO users
+    SELECT DISTINCT
         user_id,
         first_name,
         last_name,
         gender,
         level
-    FROM staging_events;
+    FROM staging_events
+    WHERE user_id IS NOT NULL;
 """)
 
 song_table_insert = ("""
-    INSERT INTO songs SELECT DISTINCT (song_id)
+    INSERT INTO songs 
+    SELECT DISTINCT
         song_id,
         title,
         artist_id,
         year,
         duration
-    FROM staging_songs;
+    FROM staging_songs
+    WHERE song_id IS NOT NULL;
 """)
 
 artist_table_insert = ("""
-    INSERT INTO artists SELECT DISTINCT (artist_id)
+    INSERT INTO artists 
+    SELECT DISTINCT
         artist_id,
         artist_name,
         artist_location,
         artist_latitude,
-        artist_longitude,
-    FROM staging_songs;
+        artist_longitude
+    FROM staging_songs
+    WHERE artist_id IS NOT NULL;
 """)
 
 time_table_insert = ("""
