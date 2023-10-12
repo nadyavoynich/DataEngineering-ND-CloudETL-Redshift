@@ -113,28 +113,23 @@ time_table_create = ("""
 
 # STAGING TABLES
 
-staging_events_copy = ("""
+staging_events_copy = f"""
     COPY staging_events
-    FROM {}
-    IAM_ROLE {}
-    JSON {}
-    REGION {};
-""").format(config['S3']['LOG_DATA'],
-            config['IAM_ROLE']['ARN'],
-            config['S3']['LOG_JSONPATH'],
-            config['CLUSTER']['REGION']
-            )
+    FROM {config['S3']['LOG_DATA']}
+    CREDENTIALS 'aws_iam_role={config['IAM_ROLE']['ARN']}'
+    REGION {config['CLUSTER']['REGION']}
+    JSON {config['S3']['LOG_JSONPATH']}
+"""
 
-staging_songs_copy = ("""
+#
+
+staging_songs_copy = f"""
     COPY staging_songs
-    FROM {}
-    IAM_ROLE {}
-    FORMAT AS JSON 'auto'
-    REGION {};
-""").format(config['S3']['SONG_DATA'],
-            config['IAM_ROLE']['ARN'],
-            config['CLUSTER']['REGION']
-            )
+    FROM {config['S3']['SONG_DATA']}
+    CREDENTIALS 'aws_iam_role={config['IAM_ROLE']['ARN']}'
+    REGION {config['CLUSTER']['REGION']}
+    JSON 'auto'
+"""
 
 # FINAL TABLES
 
