@@ -7,7 +7,8 @@ This repository contains the necessary tools and pipelines to extract Sparkify's
 
 ## Project Description
 
-This project aims to construct an ETL (Extract, Transform, Load) pipeline for Sparkify's data that is currently hosted in Amazon S3. The data in S3 is organized into two main directories:
+This project aims to construct an ETL (Extract, Transform, Load) pipeline for Sparkify's data that is currently hosted in Amazon S3. 
+The data in S3 is organized into two main directories:
 
 1. **User Activity Logs:** JSON logs that detail user activities on the Sparkify app.
 2. **Song Metadata:** JSON metadata that contains information about the songs available on the Sparkify platform.
@@ -31,34 +32,37 @@ The main objectives of this project are:
 
 1. Clone this repository:
    ```
-   git clone https://github.com/YOUR-GITHUB-USERNAME/Sparkify-ETL-Pipeline.git
-   cd Sparkify-ETL-Pipeline
+   git clone https://github.com/nadyavoynich/DataEngineering-ND-CloudETL-Redshift
+   cd Sparkify-CloudETL-Pipeline
    ```
 
 2. Create a configuration file named `dwh.cfg` in the root directory with the following format:
 
    ```
-   [AWS]
-   AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY
-   AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET
-
    [CLUSTER]
+   REGION='us-west-2'
+   
+   [DWH]
    HOST=YOUR_REDSHIFT_ENDPOINT
    DB_NAME=YOUR_DB_NAME
    DB_USER=YOUR_DB_USER
    DB_PASSWORD=YOUR_DB_PASSWORD
    DB_PORT=5439
+   
+   [IAM_ROLE]
+   ARN=YOUR_ARN
 
    [S3]
-   LOG_DATA=s3://path_to_user_activity_logs/
-   SONG_DATA=s3://path_to_song_metadata/
+   LOG_DATA='s3://udacity-dend/log_data'
+   LOG_JSONPATH='s3://udacity-dend/log_json_path.json'
+   SONG_DATA='s3://udacity-dend/song_data'
    ```
 
    Replace placeholders with your actual AWS and Redshift details.
 
 ### Execution Steps
 
-1. Create tables:
+1. Create tables (or drop and recreate tables):
    ```
    python create_tables.py
    ```
@@ -70,9 +74,18 @@ The main objectives of this project are:
 
 After running these commands, your Redshift database will have the dimensional tables loaded with data from S3, ready for analytics queries.
 
+3. Check data quality by simple counts:
+   ```
+   data_quality_check.py
+   ```
+
 ## Database Schema
 
-The database is structured into fact and dimension tables optimized for song play analyses. The primary fact table is `songplays`, and the dimension tables are `users`, `songs`, `artists`, and `time`.
+The database is structured into fact and four dimension tables optimized for song play analyses.
+The primary fact table is `songplays`, and the dimension tables are `users`, `songs`, `artists`, and `time`.
+
+## Further work
+* Create a dashboard for analytic queries on the database.
 
 ## Acknowledgments
 
