@@ -4,6 +4,7 @@ from sql_queries import create_table_queries, drop_table_queries
 
 
 def drop_tables(cur, conn):
+    """Drop tables if the tables already exist."""
     for query in drop_table_queries:
         print(f'Executing {query}')
         cur.execute(query)
@@ -11,6 +12,7 @@ def drop_tables(cur, conn):
 
 
 def create_tables(cur, conn):
+    """Create staging and analytical tables."""
     for query in create_table_queries:
         print(f'Executing {query}')
         cur.execute(query)
@@ -18,6 +20,7 @@ def create_tables(cur, conn):
 
 
 def main():
+    """Run table creation on Redshift."""
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 

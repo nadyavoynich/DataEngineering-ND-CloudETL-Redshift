@@ -4,6 +4,7 @@ from sql_queries import check_data_queries
 
 
 def check_data(cur, conn):
+    """Run entry counts for validation purposes."""
     for query in check_data_queries:
         print(f'Executing {query}')
         cur.execute(query)
@@ -14,6 +15,7 @@ def check_data(cur, conn):
 
 
 def main():
+    """Run data quality check."""
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 
